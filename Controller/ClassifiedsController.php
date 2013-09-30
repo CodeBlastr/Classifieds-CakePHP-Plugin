@@ -26,6 +26,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 		if(CakePlugin::loaded('Categories')) {
 			$this->set('categories', $this->Classified->Category->find('list', array('conditions' => array('model' => 'Classified'))));
 			$this->paginate['contain'][] = 'Category';
+			$this->paginate['contain'][] = 'Creator';
 			if(isset($this->request->query['categories'])) {
 				$categoriesParam = explode(';', rawurldecode($this->request->query['categories']));
 				$this->set('selected_categories', json_encode($categoriesParam));
