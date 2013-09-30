@@ -22,12 +22,14 @@ class ClassifiedsController extends ClassifiedsAppController {
  * @return void
  */
 	public function index() {
+		$this->set('title_for_layout', __('Classified Ads') . ' | ' . __SYSTEM_SITE_NAME);
 		$this->Classified->recursive = 0;
 		if(CakePlugin::loaded('Categories')) {
 			$this->set('categories', $this->Classified->Category->find('list', array('conditions' => array('model' => 'Classified'))));
 			$this->paginate['contain'][] = 'Category';
 			$this->paginate['contain'][] = 'Creator';
 			if(isset($this->request->query['categories'])) {
+				$this->set('title_for_layout', $this->request->query['categories'] . ' < ' . __('Classifieds') . ' | ' . __SYSTEM_SITE_NAME);
 				$categoriesParam = explode(';', rawurldecode($this->request->query['categories']));
 				$this->set('selected_categories', json_encode($categoriesParam));
 				$joins = array(
@@ -66,6 +68,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 			}
 		}
 		if(isset($this->request->query['q'])) {
+			$this->set('title_for_layout', $this->request->query['q'] . ' < ' . __('Classifieds') . ' | ' . __SYSTEM_SITE_NAME);
 			$categoriesParam = explode(';', rawurldecode($this->request->query['categories']));
 			$this->paginate['conditions']['Category.name'] = $categoriesParam;
 			$this->paginate['conditions']['OR'] = array(
@@ -97,6 +100,7 @@ class ClassifiedsController extends ClassifiedsAppController {
  * @return void
  */
 	public function add() {
+		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
 			$this->Classified->create();
 			if ($this->Classified->save($this->request->data)) {
@@ -175,6 +179,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 	
 	public function categories() {
 		if (CakePlugin::loaded('Categories')) {
+			$this->set('title_for_layout', __('Classified Ad Categories') . ' | ' . __SYSTEM_SITE_NAME);
 			$this->request->data = $this->Classified->Category->find('all', array(
 					'conditions' => array(
 							'model' => 'Classified',
