@@ -107,6 +107,9 @@ class ClassifiedsController extends ClassifiedsAppController {
 	public function add() {
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
+			debug($this->request->data);
+			debug($this->Classified->Category->find('list', array('conditions' => array('Category.id' => $this->request->data['Category']['Category']))));
+			break;
 			$this->Classified->create();
 			if ($this->Classified->save($this->request->data)) {
 				$this->Session->setFlash(__('The Classified has been saved'));
@@ -117,13 +120,9 @@ class ClassifiedsController extends ClassifiedsAppController {
 		}
 
 		if (CakePlugin::loaded('Categories')) {
-			$this->set('categories', $this->Classified->Category->find('all', array(
+			$this->set('categories', $this->Classified->Category->find('threaded', array(
 				'conditions' => array(
 					'Category.model' => 'Classified',
-					'OR' => array(
-						array('Category.parent_id' => null),
-						array('Category.parent_id' => '')
-					)
 				)
 			)));
 		}
