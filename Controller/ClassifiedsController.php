@@ -12,10 +12,15 @@ class ClassifiedsController extends ClassifiedsAppController {
  *
  * @var array
  */
-	public $helpers = array('Media.Media');
+	public $helpers = array('Utils.Tree', 'Media.Media');
 	
+/**
+ * Uses
+ *
+ * @var array
+ */
 	public $uses = 'Classifieds.Classified';
-
+	
 /**
  * index method
  *
@@ -48,7 +53,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 			         );
 				$this->paginate['joins'] = $joins;
 				$this->paginate['order']['Classified.is_featured'] = 'DESC';
-				$this->paginate['conditions'] = array('Category.name' => $categoriesParam);
+				$this->paginate['conditions']['Category.name'] = $categoriesParam;
 				$this->paginate['fields'] = array(
 					'DISTINCT Classified.id',
 					'Classified.title',
@@ -104,6 +109,9 @@ class ClassifiedsController extends ClassifiedsAppController {
 	public function add() {
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
+			debug($this->request->data);
+			debug($this->Classified->Category->find('list', array('conditions' => array('Category.id' => $this->request->data['Category']['Category']))));
+			break;
 			$this->Classified->create();
 			if ($this->Classified->save($this->request->data)) {
 				$this->Session->setFlash(__('The Classified has been saved'));
@@ -114,16 +122,16 @@ class ClassifiedsController extends ClassifiedsAppController {
 		}
 
 		if (CakePlugin::loaded('Categories')) {
-			$this->set('categories', $this->Classified->Category->find('all', array(
-				'conditions' => array('model' => 'Classified')
+			$this->set('categories', $this->Classified->Category->find('threaded', array(
+				'conditions' => array(
+					'Category.model' => 'Classified',
+				)
 			)));
 		}
 	}
 	
 /**
  * post method
- * 
- * uses galleries in the view instead of media
  * 
  */
 	public function post() {
@@ -178,20 +186,24 @@ class ClassifiedsController extends ClassifiedsAppController {
 		$this->Session->setFlash(__('Classified was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
-	
-	public function categories() {
-		if (CakePlugin::loaded('Categories')) {
-			$this->set('title_for_layout', __('Classified Ad Categories') . ' | ' . __SYSTEM_SITE_NAME);
-			$this->request->data = $this->Classified->Category->find('all', array(
-					'conditions' => array(
-							'model' => 'Classified',
-					),
-					'order' => array('name' => 'ASC')
-			));
-		} else {
-			throw new NotFoundException(__('Invalid URL'));
-			//$this->redirect($this->referer('/'));
-		}
+
+/**
+ * Dashboard method
+ * 
+ */
+	public function dashboard(){
+        // $this->set('counts', $counts = array_count_values(array_filter(Set::extract('/Transaction/status', $Transaction->find('all')))));
+		$this->set('statsPostedToday', $this->Classified->postedStats('today'));
+		$this->set('statsPostedThisWeek', $this->Classified->postedStats('thisWeek'));
+		$this->set('statsPostedThisMonth', $this->Classified->postedStats('thisMonth'));
+		$this->set('statsPostedThisYear', $this->Classified->postedStats('thisYear'));
+		$this->set('statsPostedAllTime', $this->Classified->postedStats('allTime'));
+		// $this->set('transactionStatuses', $Transaction->statuses());
+		// $this->set('itemStatuses', $TransactionItem->statuses());
+		
+		$this->set('title_for_layout', __('Classifieds Dashboard'));
+		$this->set('page_title_for_layout', __('Classifieds Dashboard'));
+        $this->layout = 'default';
 	}
 
 /**
@@ -230,4 +242,24 @@ class ClassifiedsController extends ClassifiedsAppController {
 		$this->Classified->contain(array('Category','Creator' => array('Gallery' => 'GalleryThumbnail')));
 		$this->set('classified', $this->Classified->read(null, $id));
 	}
+
+/**
+ * Categories method
+ * A page for editing product categories. 
+ */
+    public function categories($parentId = null) {
+        if (!empty($this->request->data['Category'])) {
+            if ($this->Classified->Category->save($this->request->data)) {
+                $this->Session->setFlash(__('Category saved'));
+            }
+        }
+		
+		$conditions = !empty($parentId) ? array('Category.parent_id' => $parentId, 'Category.model' => 'Classified') : array('Category.model' => 'Classified');
+        $categories = $this->Classified->Category->find('threaded', array('conditions' => $conditions, 'order' => array('name' => 'ASC')));
+        $this->set('parentCategories', $this->Classified->Category->generateTreeList(null, null, null, '--'));
+        $this->set(compact('categories'));
+        $this->set('page_title_for_layout', __('Classified Categories & Options'));
+		//$this->layout = 'default';
+		return $categories; // used in element Categories/categories
+    }
 }

@@ -81,4 +81,49 @@ class Classified extends ClassifiedsAppModel {
 		
 		parent::__construct($id = false, $table = null, $ds = null);
 	}
+
+	
+/**
+ * Retrieves various stats for dashboard display
+ * 
+ * @todo This could probably be done in one query, then shaped with PHP ?
+ * 
+ * @param string $param
+ * @return array|boolean
+ */
+	public function postedStats($period) {
+        // configure period
+        switch ($period) {
+            case 'today':
+                $rangeStart = date('Y-m-d', strtotime('today'));
+                break;
+            case 'thisWeek':
+                $rangeStart = date('Y-m-d', strtotime('last sunday'));
+                break;
+            case 'thisMonth':
+                $rangeStart = date('Y-m-d', strtotime('first day of this month'));
+                break;
+            case 'thisYear':
+                $rangeStart = date('Y') . '-01-01';
+                break;
+            case 'allTime':
+                $rangeStart = '0000-00-00';
+                break;
+            default:
+                break;
+		}
+		$rangeStart .= ' 00:00:00';
+        // calculate data
+        $data = $this->find('all', array(
+            'conditions' => array(
+                'OR' => array(
+                    "created >= '$rangeStart'",
+                    "modified >= '$rangeStart'",
+                    ),
+                )
+        ));
+        $data['count'] = count($data);
+        return ($data) ? $data : false;
+    }
+
 }

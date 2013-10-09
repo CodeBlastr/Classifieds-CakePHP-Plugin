@@ -37,6 +37,15 @@
 				<?php echo $this->Form->input('Category.Category', array('type' => 'radio', 'legend' => false, 'class' => 'input-medium', 'purchasable' => true, 'combine' => array('{n}.Category.id', '{n}.Category.name'), 'options' => $categories, 'limit' => 3)); ?>
 			<?php endif; ?>
 		</div>
+		
+		
+		<br />
+		
+		<br />
+		
+		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<?php echo $this->Tree->generate($categories, array('model' => 'Category', 'alias' => 'item_text', 'class' => 'categoriesList', 'id' => 'categoriesList', 'element' => 'Categories/input', 'elementPlugin' => 'classifieds')); ?>
+		
 		<div class="span3">
 			<?php echo $this->Form->input('Classified.city', array('type' => 'text')); ?>
 		</div>
@@ -50,3 +59,32 @@
 	<?php //echo $this->Form->input('Classified.weight', array('type' => 'text')); ?>
 	<?php echo $this->Form->end('Save'); ?>
 </div>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('ul').css('list-style-type', 'none');
+		$('.categoriesList li div').hide();
+		$('input[type=radio]').change(function() {
+			var parentValue = $(this).val();
+			console.log(parentValue);
+			$('.categoriesList li div').hide();
+			//$('.categoriesList li[data-parent=' + parentValue + ']').show();
+			//$('.categoriesList li ul li').hide();
+			$('.categoriesList li[data-parent=' + parentValue + '] ul li div').show();
+			$('.categoriesList li[data-parent=' + parentValue + '] ul li ul li div').hide();
+		});
+		
+		$('select').change(function(){
+			var parentValue = $(this).val();
+			console.log(parentValue);
+			//$('.categoriesList li div').hide();
+			//$('.categoriesList li[data-parent=' + parentValue + ']').show();
+			//$('.categoriesList li ul li').hide();
+			$('.categoriesList li ul li ul li div').hide();
+			$('.categoriesList li[data-parent=' + parentValue + '] ul li ul li div').hide();
+			$('.categoriesList li[data-parent=' + parentValue + '] ul li div').show();
+		});
+	});
+	
+</script>
