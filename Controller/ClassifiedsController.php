@@ -12,7 +12,7 @@ class ClassifiedsController extends ClassifiedsAppController {
  *
  * @var array
  */
-	//public $helpers = array('Media');
+	public $helpers = array('Media.Media');
 	
 	public $uses = 'Classifieds.Classified';
 
@@ -90,8 +90,10 @@ class ClassifiedsController extends ClassifiedsAppController {
 		if (!$this->Classified->exists()) {
 			throw new NotFoundException(__('Invalid classified'));
 		}
-		$this->Classified->contain(array('Category','Creator' => array('Gallery' => 'GalleryThumbnail')));
-		$this->set('classified', $this->Classified->read(null, $id));
+		$this->Classified->contain(array('Category','Creator'));
+		$classified = $this->Classified->read();		//read is a short cut for find first
+		$this->set('title_for_layout', $classified['Classified']['title'] . ' | ' . __SYSTEM_SITE_NAME);
+		$this->set('classified', $classified);
 	}
 
 /**
