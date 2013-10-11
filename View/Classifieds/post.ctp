@@ -62,10 +62,22 @@
 		$('ul').css('list-style-type', 'none');
 		$('.categoriesList').hide();
 				
-		// put our existing radio buttons into an object grouped by depth and parent
 		var inputs = {};
 		var key;
-		var parent;
+		var parent = '';
+		var name = '';
+		var key = '';
+		var parent = '';
+		var group = '';
+		var children = new Array();
+		var siblings = new Array();
+		var selector = '';
+		var temp = new Array();
+		var attr = '';
+		var append = 0;
+		
+		
+		// put our existing radio buttons into an object grouped by depth and parent
 		$.each($('input[type=radio]'), function(index, value) {
 			key = $(value).attr('data-depth');
 			inputs[key] = new Array();
@@ -82,26 +94,18 @@
 		});
 		// end building the big multi-dimensional array
 		
-		
 		// create the accordion
-		var name = '';
-		var key = '';
-		var parent = '';
-		
 		$.each(inputs, function(depth, obj) {
 			for (var key in obj) {
 				var value = obj[key];
-				$('#catTest').append('<div class="accordion-group"><div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#catTest" data-parent-label="' + parent + '" href="#collapse-' + key + '">Category</a></div><div id="collapse-' + key + '" class="accordion-body collapse"><div class="accordion-inner depth-' + key + '"></div></div></div>')
+				$('#catTest').append('<div class="accordion-group"><div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#catTest" href="#collapse-' + key + '">Categories</a></div><div id="collapse-' + key + '" class="accordion-body collapse in"><div class="accordion-inner depth-' + key + '"></div></div></div>')
 				if (value) {
 					$('#catTest .accordion-inner.depth-' + key).append(value.join(''));
 				}
-				//name = value.pop().replace('input', 'span') + '</span>';
-				parent = key;
 			}
 		});
 		
 		// give accordion blocks the proper label
-		var parent = '';
 		$.each($('#catTest input[type=radio]'), function(index, value) {
 			parent = $(this).attr('data-parent');
 			label = $('.accordion-inner input[value=' + parent + ']').next().text();
@@ -109,49 +113,63 @@
 		});
 		
 		
+		// now handle the selecting
 		$('.accordion-group').hide();
 		$('.accordion-group:first-child').show();
+		
 		$('input[type="radio"]').change(function() {
-			var child = $(this).attr('data-first-child');
-			var me = $(this).parent().parent().parent().index();
-			$('.accordion-group:gt(' + me + ')').hide();
-			$(this).parent().parent().parent().show();
-			$('input[data-parent=' + child + ']').parent().parent().parent().show();
+						
+			// what to hide
+			depth = $(this).data('depth') + 2; // anything two levels up gets hidden when we make a change to a previously selected category
+			$('input').filter( function() {
+				console.log(depth)
+				return $(this).data('depth') > depth;
+			}).parent().parent().parent().hide();
+			
+			siblings = $(this).siblings(); 
+			selector = 'input[data-parent=';
+			$.each(siblings, function(index) {
+				attr = $(this).attr('data-children');
+				if (attr) {
+					temp = attr.split(',');
+					selector = append ? selector + ', input[data-parent=' + temp.join('], input[data-parent=') + ']' : selector + temp.join('], input[data-parent=') + ']';
+				} else {
+					selector = append ? selector + ', input[data-parent=full]' : selector + 'none]';
+				}
+				append = 1;
+			});
+			$(selector).parent().parent().parent().hide(); // selector is a string of all the input[data-parent] to hide, eg. the non-selected radios inputs next to the one that is selected
+			append = 0; // reset
+			selector = ''; // reset
+			
+			
+			// what to show
+			attr = $(this).attr('data-children');
+			children = attr ? attr.split(',') : null; // children of selected input
+			selector = children ? 'input[data-parent=' + children.join('], input[data-parent=') + ']' : null;
+			$(selector).parent().parent().parent().show();
+			
+			
+			//selector = 'input[data-parent=' + children.join('], input[data-parent=') + ']';
+			//$(selector).parent().parent().parent().hide();
+			// selector = 'input[data-parent=' + children.join('], input[data-parent=') + ']';
+			// group = $(selector).parent().parent().parent();
+			// $('.accordion-group:gt(' + me + ')').not(group).hide(); // hide items after the selected box, that aren't needed
+			// group.show();
+			// $.each(children, function(n, child) {
+				// group = $('input[data-parent=' + child + ']').parent().parent().parent(); // the accordion-group we want to show
+		// console.log(group);
+				// $('.accordion-group:gt(' + me + ')').not(group).hide(); // hide items after the selected box
+		// console.log(group.attr('class'));
+				// //group.collapse('show');
+				// group.show({ // show just the boxes we want
+					// done: function() {
+						// //this.collapse('show');
+						// //$('a.accordion-toggle', this).trigger('click'); // and toggle it open
+					// }
+				// });
+			// });		
 		});
-		
-		
-		// inputs[0][0] = automobiles
-		// inputs[1][0] = make
-		// inputs[2][0] = dodge
-		// inputs[2][1] = ford
-		// inputs[3][0] = model
-		// inputs[3][1] = model
-		// inputs[4][0] = caravan
-		// inputs[0][1] = electronics
-		// inputs[0][2] = equipment & ag		
-		
-		
-		// $('.categoriesList li div').hide();
-		// $('input[type=radio]').change(function() {
-			// var parentValue = $(this).val();
-			// console.log(parentValue);
-			// $('.categoriesList li div').hide();
-			// //$('.categoriesList li[data-parent=' + parentValue + ']').show();
-			// //$('.categoriesList li ul li').hide();
-			// $('.categoriesList li[data-parent=' + parentValue + '] ul li div').show();
-			// $('.categoriesList li[data-parent=' + parentValue + '] ul li ul li div').hide();
-		// });
-// 		
-		// $('select').change(function(){
-			// var parentValue = $(this).val();
-			// console.log(parentValue);
-			// //$('.categoriesList li div').hide();
-			// //$('.categoriesList li[data-parent=' + parentValue + ']').show();
-			// //$('.categoriesList li ul li').hide();
-			// $('.categoriesList li ul li ul li div').hide();
-			// $('.categoriesList li[data-parent=' + parentValue + '] ul li ul li div').hide();
-			// $('.categoriesList li[data-parent=' + parentValue + '] ul li div').show();
-		// });
 	});
 	
 </script>
