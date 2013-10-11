@@ -1,13 +1,15 @@
 <?php 
-if (!empty($data['children'])) { 
-	$options = Set::combine($data['children'], '{n}.Category.id', '{n}.Category.name');
-	echo $this->Form->input('Category.Category.'.$depth, array('empty' => '--Select--', 'options' => $options, 'type' => 'select', 'label' => $data['Category']['name'], 'value' => $data['Category']['id']));
-} else {
+// if (!empty($data['children'])) {
+	$firstChild = !empty($data['children'][0]['Category']['id']) ? $data['children'][0]['Category']['id'] : null;
+	// $options = Set::combine($data['children'], '{n}.Category.id', '{n}.Category.name');
+	// echo $this->Form->input('Category.Category.'.$depth, array('empty' => '--Select--', 'options' => $options, 'type' => 'radio', 'label' => $data['Category']['name'], 'value' => $data['Category']['id']));
+// } else {
 	
+	echo $this->Form->input('Category.Category.'.$depth, array('data-depth' => $depth, 'data-first-child' => $firstChild, 'data-parent' => $data['Category']['parent_id'], 'options' => array($data['Category']['id'] => $data['Category']['name']), 'type' => 'radio', 'value' => $data['Category']['id']));
 	//debug($data);
-}
+//}
 
-$this->Tree->addItemAttribute('data-parent', false, $data['Category']['id']);
+//$this->Tree->addItemAttribute('data-parent', false, $data['Category']['id']);
 ?>
 
 <?php
