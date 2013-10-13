@@ -72,13 +72,12 @@ class Classified extends ClassifiedsAppModel {
 		if(CakePlugin::loaded('Categories')) {
 			$this->actsAs[] = 'Categories.Categorizable';
 			$this->hasAndBelongsToMany['Category'] = array(
-					'className' => 'Categories.Category',
-					'foreignKey' => 'foreign_key',
-					'associationForeignKey' => 'category_id',
-					'with' => 'Categories.Categorized'
-				);
+				'className' => 'Categories.Category',
+				'foreignKey' => 'foreign_key',
+				'associationForeignKey' => 'category_id',
+				'with' => 'Categories.Categorized'
+			);
 		}
-		
 		parent::__construct($id = false, $table = null, $ds = null);
 	}
 
