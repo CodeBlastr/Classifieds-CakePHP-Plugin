@@ -13,7 +13,6 @@ class ClassifiedsController extends ClassifiedsAppController {
  * @var array
  */
 	public $helpers = array('Utils.Tree', 'Media.Media');
-	
 /**
  * Uses
  *
@@ -101,7 +100,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 		if (!$this->Classified->exists()) {
 			throw new NotFoundException(__('Invalid classified'));
 		}
-		$this->Classified->contain(array('Category','Creator'));
+		$this->Classified->contain(array('Category', 'Creator'));
 		$classified = $this->Classified->read();		//read is a short cut for find first
 		$this->set('title_for_layout', $classified['Classified']['title'] . ' | ' . __SYSTEM_SITE_NAME);
 		$this->set('classified', $classified);
@@ -189,6 +188,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 		$this->Session->setFlash(__('Classified was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+
 
 /**
  * Dashboard method
