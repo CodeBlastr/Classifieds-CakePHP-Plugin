@@ -29,10 +29,11 @@ class ClassifiedsController extends ClassifiedsAppController {
 	public function index() {
 		$this->set('title_for_layout', __('Classified Ads') . ' | ' . __SYSTEM_SITE_NAME);
 		$this->Classified->recursive = 0;
+		
 		if(CakePlugin::loaded('Categories')) {
-			$this->set('categories', $this->Classified->Category->find('list', array('conditions' => array('model' => 'Classified'))));
 			$this->paginate['contain'][] = 'Category';
 			$this->paginate['contain'][] = 'Creator';
+			
 			if(isset($this->request->query['categories'])) {
 				$this->set('title_for_layout', $this->request->query['categories'] . ' < ' . __('Classifieds') . ' | ' . __SYSTEM_SITE_NAME);
 				$categoriesParam = explode(';', rawurldecode($this->request->query['categories']));
@@ -72,6 +73,7 @@ class ClassifiedsController extends ClassifiedsAppController {
 					);
 			}
 		}
+
 		if(isset($this->request->query['q'])) {
 			$this->set('title_for_layout', $this->request->query['q'] . ' < ' . __('Classifieds') . ' | ' . __SYSTEM_SITE_NAME);
 			$categoriesParam = explode(';', rawurldecode($this->request->query['categories']));
@@ -81,7 +83,11 @@ class ClassifiedsController extends ClassifiedsAppController {
 				'Classified.description' => '%' . $this->request->query['q'] . '%'
 			);
 		}
-		$this->set('classifieds', $this->paginate());
+		$this->set('classifieds', $classifieds = $this->paginate());
+		
+		$conditions = !empty($categoriesParam) ? array('Category.model' => 'Classified', 'Category.name' => $categoriesParam) : array('Category.model' => 'Classified', 'Category.parent_id' => null);
+		$contain = !empty($categoriesParam) ? array('ChildCategory' => array('ChildCategory')) : array(); 
+		$this->set('categories', $this->Classified->Category->find('all', array('conditions' => $conditions, 'contain' => $contain)));
 	}
 
 /**
