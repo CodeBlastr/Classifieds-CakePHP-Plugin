@@ -94,16 +94,10 @@ class ClassifiedsController extends ClassifiedsAppController {
 		if (!$this->Classified->exists()) {
 			throw new NotFoundException(__('Invalid classified'));
 		}
-		$this->Classified->contain(array(
-			'Category',
-			'Creator' => array('Rating', 'Gallery' => 'GalleryThumb')));
+		$this->Classified->contain(array('Category', 'Creator'));
 		$classified = $this->Classified->read();		//read is a short cut for find first
 		$this->set('title_for_layout', $classified['Classified']['title'] . ' | ' . __SYSTEM_SITE_NAME);
 		$this->set('classified', $classified);
-		
-		
-		
-		
 	}
 
 /**
@@ -114,9 +108,6 @@ class ClassifiedsController extends ClassifiedsAppController {
 	public function add() {
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
-			debug($this->request->data);
-			debug($this->Classified->Category->find('list', array('conditions' => array('Category.id' => $this->request->data['Category']['Category']))));
-			break;
 			$this->Classified->create();
 			if ($this->Classified->save($this->request->data)) {
 				$this->Session->setFlash(__('The Classified has been saved'));

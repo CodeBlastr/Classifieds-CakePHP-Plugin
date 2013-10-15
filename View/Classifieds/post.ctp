@@ -57,10 +57,19 @@
 </div>
 
 
+<style type="text/css">
+.categoriesList {
+	display: none;
+}
+.accordion-heading .accordion-toggle {
+	display: inline-block;
+}
+</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('ul').css('list-style-type', 'none');
-		$('.categoriesList').hide();
+		$('input[type="radio"]').removeAttr('checked');
+		
 				
 		var inputs = {};
 		var key;
@@ -98,7 +107,7 @@
 		$.each(inputs, function(depth, obj) {
 			for (var key in obj) {
 				var value = obj[key];
-				$('#catTest').append('<div class="accordion-group"><div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#catTest" href="#collapse-' + key + '">Categories</a></div><div id="collapse-' + key + '" class="accordion-body collapse in"><div class="accordion-inner depth-' + key + '"></div></div></div>')
+				$('#catTest').append('<div class="accordion-group"><div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#catTest" href="#collapse-' + key + '">Category</a></div><div id="collapse-' + key + '" class="accordion-body collapse in"><div class="accordion-inner depth-' + key + '"></div></div></div>')
 				if (value) {
 					$('#catTest .accordion-inner.depth-' + key).append(value.join(''));
 				}
@@ -122,9 +131,8 @@
 			// what to hide
 			depth = $(this).data('depth') + 2; // anything two levels up gets hidden when we make a change to a previously selected category
 			$('input').filter( function() {
-				console.log(depth)
 				return $(this).data('depth') > depth;
-			}).parent().parent().parent().hide();
+			}).removeAttr('checked').parent().parent().parent().hide().find('.accordion-heading span.label').remove();
 			
 			siblings = $(this).siblings(); 
 			selector = 'input[data-parent=';
@@ -138,7 +146,7 @@
 				}
 				append = 1;
 			});
-			$(selector).parent().parent().parent().hide(); // selector is a string of all the input[data-parent] to hide, eg. the non-selected radios inputs next to the one that is selected
+			$(selector).removeAttr('checked').parent().parent().parent().hide().find('.accordion-heading span.label').remove(); // selector is a string of all the input[data-parent] to hide, eg. the non-selected radios inputs next to the one that is selected
 			append = 0; // reset
 			selector = ''; // reset
 			
@@ -149,26 +157,12 @@
 			selector = children ? 'input[data-parent=' + children.join('], input[data-parent=') + ']' : null;
 			$(selector).parent().parent().parent().show();
 			
+			// shrink up the current box after selection
+			var heading = $('a.accordion-toggle', $(this).parent().parent().parent()); // '#collapse-99999-9999-99999-99999
+			$(heading.attr('href')).collapse('hide');
 			
-			//selector = 'input[data-parent=' + children.join('], input[data-parent=') + ']';
-			//$(selector).parent().parent().parent().hide();
-			// selector = 'input[data-parent=' + children.join('], input[data-parent=') + ']';
-			// group = $(selector).parent().parent().parent();
-			// $('.accordion-group:gt(' + me + ')').not(group).hide(); // hide items after the selected box, that aren't needed
-			// group.show();
-			// $.each(children, function(n, child) {
-				// group = $('input[data-parent=' + child + ']').parent().parent().parent(); // the accordion-group we want to show
-		// console.log(group);
-				// $('.accordion-group:gt(' + me + ')').not(group).hide(); // hide items after the selected box
-		// console.log(group.attr('class'));
-				// //group.collapse('show');
-				// group.show({ // show just the boxes we want
-					// done: function() {
-						// //this.collapse('show');
-						// //$('a.accordion-toggle', this).trigger('click'); // and toggle it open
-					// }
-				// });
-			// });		
+			// add a little text to show what was chosen
+			heading.parent().html($(heading).clone().wrap('<p>').parent().html() + ' <span class="label label-info">' + $(this).next().text() + '</span>');
 		});
 	});
 	
