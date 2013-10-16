@@ -7,26 +7,13 @@ App::uses('ClassifiedsAppController', 'Classifieds.Controller');
  */
 class ClassifiedsController extends ClassifiedsAppController {
 
+	public $uses = 'Classifieds.Classified';
 /**
  * Helpers
  *
  * @var array
  */
 	public $helpers = array('Utils.Tree', 'Media.Media');
-/**
- * Uses
- *
- * @var array
- */
-	public $uses = 'Classifieds.Classified';
-	
-	public function __construct($request = null, $response = null) {
-		if (CakePlugin::loaded('Ratings')) {
-			$this->components[] = 'Ratings.Ratings';
-			$this->helpers[] = 'Ratings.Rating';
-		}	
-		parent::__construct($request, $response);
-	}
 	
 /**
  * index method
