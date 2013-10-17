@@ -197,7 +197,25 @@ class ClassifiedsController extends ClassifiedsAppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
+/**
+ * @param string $id
+ */
+	public function compare($id = null){
+		//compare two classifieds here
+		//select by $id && $id 		
+		if($this->request->is('post')){
+			debug($this->request->data);
+			$classifieds = $this->Classified->find('all', array('conditions' => array('Classified.id' => set::extract('/id', $this->request->data['Classified']))));
+			$this->set(compact('classifieds'));
+		} else {
+			$this->Session->setFlash(__('Please select two records to compare.'));
+			$this->redirect(array('action' => 'index'));
+		}
 
+	}
+ 	
+ 
+ 
 /**
  * Dashboard method
  * 
