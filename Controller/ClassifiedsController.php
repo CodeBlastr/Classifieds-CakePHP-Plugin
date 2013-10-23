@@ -7,13 +7,26 @@ App::uses('ClassifiedsAppController', 'Classifieds.Controller');
  */
 class ClassifiedsController extends ClassifiedsAppController {
 
-	public $uses = 'Classifieds.Classified';
 /**
  * Helpers
  *
  * @var array
  */
 	public $helpers = array('Utils.Tree', 'Media.Media');
+/**
+ * Uses
+ *
+ * @var array
+ */
+	public $uses = 'Classifieds.Classified';
+	
+	public function __construct($request = null, $response = null) {
+		if (CakePlugin::loaded('Ratings')) {
+			$this->components[] = 'Ratings.Ratings';
+			$this->helpers[] = 'Ratings.Rating';
+		}	
+		parent::__construct($request, $response);
+	}
 	
 /**
  * index method
@@ -95,7 +108,8 @@ class ClassifiedsController extends ClassifiedsAppController {
 		if (!$this->Classified->exists()) {
 			throw new NotFoundException(__('Invalid classified'));
 		}
-		$this->Classified->contain(array('Category', 'Creator'));
+		//$this->Classified->contain(array('Category', 'Creator'));
+		$this->Classified->contain(array('Category', 'Creator' => array('Gallery' => 'GalleryThumb')));
 		$classified = $this->Classified->read();		//read is a short cut for find first
 		$this->set('title_for_layout', $classified['Classified']['title'] . ' | ' . __SYSTEM_SITE_NAME);
 		$this->set('classified', $classified);
@@ -187,18 +201,23 @@ class ClassifiedsController extends ClassifiedsAppController {
 /**
  * @param string $id
  */
-	public function compare($id = null){
-		//compare two classifieds here
-		//select by $id && $id 		
-		if($this->request->is('post')){
+	public function compare(){		
+		if(empty($this->request->query)){
+			$this->Session->setFlash(__('Please select two records to compare.'));
+			$this->redirect($this->referer());
+		} 
+
+		$this->request->data =  $this->Classified->find('all', array('limit' => 2,'conditions' => array('Classified.id' => $this->request->query)));
+		
+		/*****Older way of posting data from the compare form. Now using the get method in order to URL append the Classified ID`s****/
+		/*if($this->request->is('post')){
 			debug($this->request->data);
 			$classifieds = $this->Classified->find('all', array('conditions' => array('Classified.id' => set::extract('/id', $this->request->data['Classified']))));
 			$this->set(compact('classifieds'));
 		} else {
 			$this->Session->setFlash(__('Please select two records to compare.'));
 			$this->redirect(array('action' => 'index'));
-		}
-
+		}*/
 	}
  	
  

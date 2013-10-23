@@ -41,7 +41,8 @@
 		<div class="row-fluid">
 			<div class="span3">
 				<?php if (CakePlugin::loaded('Categories')) : ?>
-					<?php echo $this->Form->input('Category.Category', array('type' => 'select', 'options' => $categories, 'multiple' => 'checkbox', 'limit' => 3)); ?>
+					<?php // needs some work to be able to use (to work with the /classifieds/classifieds/post category picker)
+					//echo $this->Form->input('Category.Category', array('type' => 'select', 'options' => $categories, 'multiple' => 'checkbox', 'limit' => 3)); ?>
 				<?php endif; ?>
 			</div>
 			<div class="span3">				
