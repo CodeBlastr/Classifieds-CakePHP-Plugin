@@ -78,7 +78,7 @@ class Classified extends ClassifiedsAppModel {
 				'with' => 'Categories.Categorized'
 			);
 		}
-		parent::__construct($id = false, $table = null, $ds = null);
+		parent::__construct($id, $table, $ds);
 	}
 
 	
