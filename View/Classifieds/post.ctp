@@ -5,7 +5,7 @@
 			<?php echo $this->Form->input('Classified.title', array('type' => 'text')); ?>
 		</div>
 		<div class="span4">
-			<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datepicker', 'class' => 'input-medium')); ?>
+			<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datetimepicker', 'class' => 'input-medium')); ?>
 		</div>
 		<div class="span4">
 			<?php echo $this->Form->input('GalleryImage.filename', array('type' => 'file')); ?>
