@@ -1,8 +1,8 @@
 <?php echo $this->Html->script('http://code.highcharts.com/highcharts.js', array('inline' => false)); ?>
 <?php echo $this->Html->script('http://code.highcharts.com/modules/exporting.js', array('inline' => false)); ?>
 
-<div class="products row-fluid">
-    <div class="span8 pull-left first">
+<div class="products row">
+    <div class="span8 col-md-8">
         <ul class="nav nav-tabs" id="myTab">
             <li><a href="#today" data-toggle="tab">Today</a></li>
             <li><a href="#thisWeek" data-toggle="tab">This Week</a></li>
@@ -14,7 +14,7 @@
             <div class="tab-pane fade" id="today">
                 <div class="row-fluid">
                     <div class="alert alert-success clearfix">
-                        <h3 class="span6 pull-left"> <?php echo $statsPostedToday['count']; ?> Posted Today </h3>
+                        <h3 class="span6 col-md-6 pull-left"> <?php echo $statsPostedToday['count']; ?> Posted Today </h3>
                     </div>
 
                     <?php
@@ -128,13 +128,11 @@
     
     
 
-    <div class="tagProducts span3 pull-right last">
-        <ul class="nav nav-list">
-            <li>
-            	<?php echo $this->Html->link('Manage Listings', array('plugin' => 'classifieds', 'controller' => 'classifieds', 'action' => 'index')); ?>
-            	<?php echo $this->Html->link('Manage Categories', array('plugin' => 'classifieds', 'controller' => 'classifieds', 'action' => 'categories')); ?>
-            </li>
-        </ul>
+    <div class="tagProducts span3 col-md-4">
+        <div class="list-group">
+            <?php echo $this->Html->link('Manage Listings', array('plugin' => 'classifieds', 'controller' => 'classifieds', 'action' => 'index'), array('class' => 'list-group-item')); ?>
+            <?php echo $this->Html->link('Manage Categories', array('plugin' => 'classifieds', 'controller' => 'classifieds', 'action' => 'categories'), array('class' => 'list-group-item')); ?>
+        </div>
     </div>
 
 </div>
