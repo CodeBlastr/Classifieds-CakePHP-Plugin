@@ -43,4 +43,4 @@ $this->set('context_menu', array('menus' => array(
 			// $this->Form->create('Category').$this->Form->hidden('Category.model', array('value' => 'Product')).$this->Form->input('Category.parent_id', array('empty' => '-- Optional --', 'options' => $parentCategories)).$this->Form->input('Category.name').$this->Form->end('Submit'),
 			// )
 		// ),
-	))); ?>
+	)));

@@ -162,15 +162,11 @@ $this->set('context_crumbs', array('crumbs' => array(
 // set the contextual menu items
 $this->set('context_menu', array('menus' => array(
     array(
-		'heading' => 'Products',
+		'heading' => 'Classifieds',
 		'items' => array(
 			$this->Html->link(__('Dashboard'), array('admin' => true, 'controller' => 'classifieds', 'action' => 'dashboard'), array('class' => 'active')),
-			)
-		),
-        array(
-            'heading' => 'Products',
-            'items' => array(
-                $this->Html->link(__('List Classifieds'), array('controller' => 'classifieds', 'action' => 'index')),
+			$this->Html->link(__('List Classifieds'), array('controller' => 'classifieds', 'action' => 'index')),
+			$this->Html->link(__('Add'), array('admin' => false, 'controller' => 'classifieds', 'action' => 'add')),
             )
         ),
-        ))); ?>
+)));

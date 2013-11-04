@@ -121,6 +121,16 @@ class ClassifiedsController extends ClassifiedsAppController {
  * @return void
  */
 	public function add() {
+		// i don't remember why we moved to the post function now, but we never seem to use the add function (probably will switch later)
+		$this->redirect(array('action' => 'post'));
+		return $this->post();
+	}
+	
+/**
+ * post method
+ * 
+ */
+	public function post() {
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
 			$this->Classified->create();
@@ -139,14 +149,6 @@ class ClassifiedsController extends ClassifiedsAppController {
 				)
 			)));
 		}
-	}
-	
-/**
- * post method
- * 
- */
-	public function post() {
-		return $this->add();
 	}
  
 /**

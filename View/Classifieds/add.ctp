@@ -52,3 +52,15 @@
 	<?php //echo $this->Form->input('Classified.weight', array('type' => 'text')); ?>
 	<?php echo $this->Form->end('Save'); ?>
 </div>
+
+<?php
+// set the contextual menu items
+$this->set('context_menu', array('menus' => array(
+    array(
+		'heading' => 'Classifieds',
+		'items' => array(
+			$this->Html->link(__('Dashboard'), array('admin' => true, 'controller' => 'classifieds', 'action' => 'dashboard')),
+			$this->Html->link(__('List'), array('controller' => 'classifieds', 'action' => 'index')),
+			)
+		),
+	)));
