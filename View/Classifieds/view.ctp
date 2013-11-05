@@ -1,7 +1,7 @@
 <div class="classified view">
 	<div class="row-fluid clearfix">
 		<div class="span5 pull-left">
-			<?php echo $this->Element('Galleries.gallery', array('model' => 'Classified', 'foreignKey' => $classified['Classified']['id'])); ?>
+			<?php echo $this->Media->display($classified['Media'][0], array('alt' => $classified['Classified']['name'])); ?>
 		</div>
 		<div class="span7 pull-right">
 			<h3><?php echo $classified['Classified']['title']; ?></h3>

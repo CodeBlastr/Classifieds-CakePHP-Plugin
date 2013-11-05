@@ -8,9 +8,7 @@
 				<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datetimepicker')); ?>
 			</div>
 			<div class="span4">
-				<?php if(CakePlugin::loaded('Media')) : ?>
-					<?php echo $this->Element('Media.media_selector', array('media' => $this->request->data['Media'], 'multiple' => true)); ?>
-				<?php endif; ?>
+				<?php echo CakePlugin::loaded('Media') ? $this->Element('Media.media_selector', array('media' => $this->request->data['Media'], 'multiple' => true)) : null; ?>
 			</div>
 		</div>
 		
@@ -42,7 +40,7 @@
 			<div class="span3">				
 				<?php echo $this->Form->input('Classified.city', array('type' => 'text')); ?>
 			</div>
-			<div class="span3">				
+			<div class="span3">		
 				<?php echo $this->Form->input('Classified.state', array('empty' => '- choose -', 'options' => states())); ?>
 			</div>
 			<div class="span3">			
