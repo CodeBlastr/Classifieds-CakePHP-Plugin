@@ -53,6 +53,19 @@ class ClassifiedHelper extends AppHelper {
  * 2. We don't need to load a bunch of components and helpers and worry about whether it is need for multi-sites
  * 3. Commence beating me :) 
  */
+ 
+	 public function featuredSlider() {
+		 	App::uses('Classified', 'Classifieds.Model');
+		    $Classified = new Classified;
+			$data = $Classified->find('all', array(
+				'order' => array(
+					'Classified.created' => 'DESC'
+					),
+				'limit' => 4
+				));
+			return $data;
+	 	}
+	 
  	public function latestAds() {
 	 	App::uses('Classified', 'Classifieds.Model');
 	    $Classified = new Classified;
