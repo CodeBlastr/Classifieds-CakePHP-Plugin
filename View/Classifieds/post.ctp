@@ -8,7 +8,7 @@
 			<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datetimepicker', 'class' => 'input-medium')); ?>
 		</div>
 		<div class="span4">
-			<?php echo $this->Form->input('GalleryImage.filename', array('type' => 'file')); ?>
+			<?php echo CakePlugin::loaded('Media') ? $this->Element('Media.selector', array('media' => $this->request->data['Media'], 'multiple' => true)) : null; ?>
 		</div>
 	</div>
 
@@ -167,3 +167,16 @@
 	});
 	
 </script>
+
+
+<?php
+// set the contextual menu items
+$this->set('context_menu', array('menus' => array(
+    array(
+		'heading' => 'Classifieds',
+		'items' => array(
+			$this->Html->link(__('Dashboard'), array('admin' => true, 'controller' => 'classifieds', 'action' => 'dashboard')),
+			$this->Html->link(__('List'), array('controller' => 'classifieds', 'action' => 'index')),
+			)
+		),
+	)));

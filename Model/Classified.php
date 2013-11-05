@@ -14,15 +14,6 @@ class Classified extends ClassifiedsAppModel {
  * @var string
  */
 	public $displayField = 'title';
-        
- /**
-  * Acts as
-  * 
-  * @var array
-  */
-    public $actsAs = array(
-        'Galleries.Mediable' => array('modelAlias' => 'Classified'),
-		);
 		
 /**
  * Validation rules
@@ -64,7 +55,6 @@ class Classified extends ClassifiedsAppModel {
  * 
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-		
 		if(CakePlugin::loaded('Media')) {
 			$this->actsAs[] = 'Media.MediaAttachable';
 		}
