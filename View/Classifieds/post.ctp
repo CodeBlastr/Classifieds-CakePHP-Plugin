@@ -8,7 +8,8 @@
 			<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datetimepicker', 'class' => 'input-medium')); ?>
 		</div>
 		<div class="span4">
-			<?php echo CakePlugin::loaded('Media') ? $this->Element('Media.selector', array('media' => $this->request->data['Media'], 'multiple' => true)) : null; ?>
+			<!-- This is breaking the categories tree below-->
+			<?php echo CakePlugin::loaded('Media') ? $this->Element('Media.selector', array('media' => $this->request->data['Media'], 'multiple' => true, 'bootstap' => 2)) : null; ?>
 		</div>
 	</div>
 
