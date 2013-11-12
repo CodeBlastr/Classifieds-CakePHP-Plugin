@@ -115,4 +115,24 @@ class Classified extends ClassifiedsAppModel {
         return ($data) ? $data : false;
     }
 
+
+/**
+ * After Successful Payment method
+ * 
+ * @param array $data A payment object
+ */
+	public function afterSuccessfulPayment($data) {
+		foreach ($data['TransactionItem'] as $transactionItem) {
+			if ($transactionItem['model'] == 'Classified') {
+				$this->id = $transactionItem['foreign_key'];
+				if ($this->saveField('is_featured', 1, false)) {
+					// do nothing it is saved
+				} else {
+					throw new Exception(__('Problem upgrading to featured item, please alert an administrator.'));
+				}
+			}
+		}
+		return true;
+	}
+
 }
