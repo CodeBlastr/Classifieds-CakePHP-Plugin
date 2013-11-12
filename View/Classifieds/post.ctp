@@ -71,7 +71,6 @@
 		$('ul').css('list-style-type', 'none');
 		$('input[type="radio"]').removeAttr('checked');
 		
-				
 		var inputs = {};
 		var key;
 		var parent = '';
@@ -85,8 +84,7 @@
 		var temp = new Array();
 		var attr = '';
 		var append = 0;
-		
-		
+
 		// put our existing radio buttons into an object grouped by depth and parent
 		$.each($('input[type=radio]'), function(index, value) {
 			key = $(value).attr('data-depth');

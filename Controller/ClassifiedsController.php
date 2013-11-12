@@ -5,7 +5,7 @@ App::uses('ClassifiedsAppController', 'Classifieds.Controller');
  *
  * @property Classified $Classified
  */
-class ClassifiedsController extends ClassifiedsAppController {
+class AppClassifiedsController extends ClassifiedsAppController {
 
 /**
  * Helpers
@@ -141,7 +141,6 @@ class ClassifiedsController extends ClassifiedsAppController {
 				$this->Session->setFlash(__('The Classified could not be saved. Please, try again.'));
 			}
 		}
-
 		if (CakePlugin::loaded('Categories')) {
 			$this->set('categories', $this->Classified->Category->find('threaded', array(
 				'conditions' => array(
@@ -299,4 +298,11 @@ class ClassifiedsController extends ClassifiedsAppController {
 		//$this->layout = 'default';
 		return $categories; // used in element Categories/categories
     }
+}
+
+
+if (!isset($refuseInit)) {
+	class ClassifiedsController extends AppClassifiedsController {
+		
+	}
 }

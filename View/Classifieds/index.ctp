@@ -21,7 +21,6 @@
 		</li>
 	<?php endforeach; ?>
 	</ul>
-	
 	<?php if(!empty($classifieds)): ?>
 		<?php foreach($classifieds as $classified): ?>
 		<div class="row-fluid">
