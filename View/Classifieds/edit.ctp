@@ -1,4 +1,3 @@
-<?php debug($this->request->data); ?>
 <div class="classifieds form">
 	<?php echo $this->Form->create('Classifieds.Classified'); ?>
 		<?php echo $this->Form->input('Classified.id'); ?>
