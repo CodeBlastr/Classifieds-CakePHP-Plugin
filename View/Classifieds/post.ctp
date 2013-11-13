@@ -5,7 +5,7 @@
 			<?php echo $this->Form->input('Classified.title', array('type' => 'text')); ?>
 		</div>
 		<div class="span4">
-			<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datetimepicker', 'class' => 'input-medium')); ?>
+			<?php echo $this->Form->input('Classified.expire_date', array('label' => 'Expiration Date', 'type' => 'datetimepicker', 'class' => 'input-medium', 'value' => date('Y-m-d h:i:s', strtotime('+30 days')))); ?>
 		</div>
 		<div class="span4">
 			<!-- This is breaking the categories tree below-->
