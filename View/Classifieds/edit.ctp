@@ -63,7 +63,7 @@
 		<?php echo $this->Form->hidden('TransactionItem.name' , array('value' => $this->request->data('Classified.title'))); ?>
 		<?php echo $this->Form->hidden('TransactionItem.model' , array('value' => 'Classified')); ?>
 		<?php echo $this->Form->hidden('TransactionItem.foreign_key' , array('value' => $this->request->data('Classified.id'))); ?>
-		<?php echo $this->Form->hidden('TransactionItem.price' , array('value' => '5.01')); ?>
+		<?php echo $this->Form->hidden('TransactionItem.price' , array('value' => '5.00')); ?>
 		<?php echo $this->Form->hidden('TransactionItem.cart_max' , array('value' => $maxQty)); ?>
 		<?php echo $this->Form->hidden('TransactionItem.cart_min' , array('value' => $minQty)); ?>
 		
