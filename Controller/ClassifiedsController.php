@@ -108,11 +108,14 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		if (!$this->Classified->exists()) {
 			throw new NotFoundException(__('Invalid classified'));
 		}
-		//$this->Classified->contain(array('Category', 'Creator'));
 		$this->Classified->contain(array('Category', 'Creator' => array('Gallery' => 'GalleryThumb')));
-		$classified = $this->Classified->read();		//read is a short cut for find first
+		$classified = $this->Classified->read();
 		$this->set('title_for_layout', $classified['Classified']['title'] . ' | ' . __SYSTEM_SITE_NAME);
 		$this->set('classified', $classified);
+		if (CakePlugin::loaded('Categories')) {
+			$adCategories = Set::extract('/Category/id', $classified);
+			$this->set('categories', $this->Classified->Category->find('all', array('conditions' => array('Category.model' => 'Classified', 'Category.id' => $adCategories))));
+		}
 	}
 
 /**
@@ -169,10 +172,11 @@ class AppClassifiedsController extends ClassifiedsAppController {
 				$this->Session->setFlash(__('The classified could not be saved. Please, try again.'));
 			}
 		} else {
-			$this->request->data = $this->Classified->read(null, $id);
-			if(CakePlugin::loaded('Categories')) {
-				$this->set('categories', $this->Classified->Category->find('list', array('conditions' => array('model' => 'Classified'))));
+			if (CakePlugin::loaded('Categories')) {
+				$this->Classified->contain(array('Category'));
+				$this->set('categories', $this->Classified->Category->find('threaded', array('conditions' => array('model' => 'Classified'))));
 			}
+			$this->request->data = $this->Classified->read(null, $id);
 		}
 	}
 
