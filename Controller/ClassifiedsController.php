@@ -170,8 +170,8 @@ class AppClassifiedsController extends ClassifiedsAppController {
 			}
 		} else {
 			$this->request->data = $this->Classified->read(null, $id);
-			if(CakePlugin::loaded('Categories')) {
-				$this->set('categories', $this->Classified->Category->find('list', array('conditions' => array('model' => 'Classified'))));
+			if (CakePlugin::loaded('Categories')) {
+				$this->set('categories', $this->Classified->Category->find('threaded', array('conditions' => array('model' => 'Classified'))));
 			}
 		}
 	}
