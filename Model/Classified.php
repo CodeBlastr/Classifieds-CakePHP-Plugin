@@ -135,4 +135,24 @@ class Classified extends ClassifiedsAppModel {
 		return true;
 	}
 
+/**
+ * origin_afterFind callback
+ * 
+ * A callback from related plugins which are only related by the abstract model/foreign_key in the db
+ * 
+ * @param array $results
+ */
+    public function origin_afterFind(Model $Model, $results = array(), $primary = false) {
+    	if ($Model->name == 'TransactionItem') {
+	        for ($i = 0; $i < count($results); ++$i) {
+    			if ($results[$i]['TransactionItem']['model'] == 'Classified') {
+    				$classified = $this->find('first', array('conditions' => array('Classified.id' => $results[$i]['TransactionItem']['foreign_key']), 'contain' => array('Creator')));
+					$results[$i]['TransactionItem']['name'] = $classified['Classified']['title'];
+					$results[$i]['TransactionItem']['_associated']['seller'] = $classified['Creator'];
+    			}
+	        }
+    	}
+		return $results;
+    }
+
 }
