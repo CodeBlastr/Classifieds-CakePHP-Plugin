@@ -169,10 +169,11 @@ class AppClassifiedsController extends ClassifiedsAppController {
 				$this->Session->setFlash(__('The classified could not be saved. Please, try again.'));
 			}
 		} else {
-			$this->request->data = $this->Classified->read(null, $id);
 			if (CakePlugin::loaded('Categories')) {
+				$this->Classified->contain(array('Category'));
 				$this->set('categories', $this->Classified->Category->find('threaded', array('conditions' => array('model' => 'Classified'))));
 			}
+			$this->request->data = $this->Classified->read(null, $id);
 		}
 	}
 
