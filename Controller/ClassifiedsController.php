@@ -108,11 +108,14 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		if (!$this->Classified->exists()) {
 			throw new NotFoundException(__('Invalid classified'));
 		}
-		//$this->Classified->contain(array('Category', 'Creator'));
 		$this->Classified->contain(array('Category', 'Creator' => array('Gallery' => 'GalleryThumb')));
-		$classified = $this->Classified->read();		//read is a short cut for find first
+		$classified = $this->Classified->read();
 		$this->set('title_for_layout', $classified['Classified']['title'] . ' | ' . __SYSTEM_SITE_NAME);
 		$this->set('classified', $classified);
+		if (CakePlugin::loaded('Categories')) {
+			$adCategories = Set::extract('/Category/id', $classified);
+			$this->set('categories', $this->Classified->Category->find('all', array('conditions' => array('Category.model' => 'Classified', 'Category.id' => $adCategories))));
+		}
 	}
 
 /**
