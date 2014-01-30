@@ -68,6 +68,8 @@ class Classified extends ClassifiedsAppModel {
 				'with' => 'Categories.Categorized'
 			);
 		}
+		
+		$this->actsAs[] = 'Metable';
 		parent::__construct($id, $table, $ds);
 	}
 
