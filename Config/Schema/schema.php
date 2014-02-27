@@ -41,6 +41,6 @@ class ClassifiedsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => false, 'default' => NULL, 'comment' => 'Modified Date'),
 		'data' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'comment' => 'Data Column', 'charset' => 'utf8'),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'latin1', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
 	);
 }
