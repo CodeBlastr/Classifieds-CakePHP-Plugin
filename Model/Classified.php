@@ -72,6 +72,29 @@ class Classified extends ClassifiedsAppModel {
 		$this->actsAs[] = 'Metable';
 		parent::__construct($id, $table, $ds);
 	}
+    
+/**
+ * Before Save method
+ * 
+ * @param type $options
+ * @return boolean
+ */
+    public function beforeSave($options = array()) {
+        $this->data = $this->_cleanData($this->data);
+        return parent::beforeSave($options);
+    }
+
+/**
+ * Clean Data
+ * 
+ * @param array
+ */
+ 	protected function _cleanData($data = null) {
+ 		if (empty($data[$this->alias]['id']) && empty($data[$this->alias]['posted_date'])) {
+ 			$data[$this->alias]['posted_date'] = date('Y-m-d h:i:s');
+ 		}
+ 		return $data;
+ 	}
 
 	
 /**

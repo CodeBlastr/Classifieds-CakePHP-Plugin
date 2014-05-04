@@ -144,14 +144,84 @@ class AppClassifiedsController extends ClassifiedsAppController {
 				$this->Session->setFlash(__('The Classified could not be saved. Please, try again.'));
 			}
 		}
+		
 		if (CakePlugin::loaded('Categories')) {
-			$this->set('categories', $this->Classified->Category->find('threaded', array(
+			// yes I know it's stupid to have both here this was a quick fix
+			$this->set('categories', $categories = $this->Classified->Category->find('threaded', array(
 				'conditions' => array(
 					'Category.model' => 'Classified',
 				)
 			)));
+			// quick fix part is here, and should be moved to a custom classifieds controller for beefyy
+			// or some way for the form input to ask for a tree list or a threaded list would be nice too
+			$this->set('categoryList', $categoryList = $this->Classified->Category->generateTreeList(
+				array(
+					'Category.model' => 'Classified',
+				),
+		          null,
+		          null,
+		          '---'
+		        ));
 		}
 	}
+	
+	
+
+
+
+/**
+ * Generate tree list with data provided (sans find() method being used)
+ * 
+ * $results should be a find('all') data structure
+ * Was not completed, but it's a good idea, and should be moved to  ZuhaInflector::generateTreeList()
+
+	public function generateTreeListSansFind(Model $Model, $results = array(), $keyPath = null, $valuePath = null, $spacer = '_', $recursive = null) {
+		$overrideRecursive = $recursive;
+		//extract($this->settings[$Model->alias]);
+		if ($overrideRecursive !== null) {
+			$recursive = $overrideRecursive;
+		}
+
+		$fields = null;
+		if (!$keyPath && !$valuePath && $Model->hasField($Model->displayField)) {
+			$fields = array($Model->primaryKey, $Model->displayField, $left, $right);
+		}
+
+		if (!$keyPath) {
+			$keyPath = '{n}.' . $Model->alias . '.' . $Model->primaryKey;
+		}
+
+		if (!$valuePath) {
+			$valuePath = array('%s%s', '{n}.tree_prefix', '{n}.' . $Model->alias . '.' . $Model->displayField);
+
+		} elseif (is_string($valuePath)) {
+			$valuePath = array('%s%s', '{n}.tree_prefix', $valuePath);
+
+		} else {
+			array_unshift($valuePath, '%s' . $valuePath[0], '{n}.tree_prefix');
+		}
+
+		$order = $Model->escapeField($left) . " asc";
+		$stack = array();
+
+		foreach ($results as $i => $result) {
+			$count = count($stack);
+			while ($stack && ($stack[$count - 1] < $result[$Model->alias][$right])) {
+				array_pop($stack);
+				$count--;
+			}
+			$results[$i]['tree_prefix'] = str_repeat($spacer, $count);
+			$stack[] = $result[$Model->alias][$right];
+		}
+		if (empty($results)) {
+			return array();
+		}
+		return Hash::combine($results, $keyPath, $valuePath);
+	}
+	 */
+	
+	
+	
  
 /**
  * edit method
@@ -174,7 +244,22 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		} else {
 			if (CakePlugin::loaded('Categories')) {
 				$this->Classified->contain(array('Category'));
-				$this->set('categories', $this->Classified->Category->find('threaded', array('conditions' => array('model' => 'Classified'))));
+				// yes I know it's stupid to have both here this was a quick fix
+				$this->set('categories', $categories = $this->Classified->Category->find('threaded', array(
+					'conditions' => array(
+						'Category.model' => 'Classified',
+					)
+				)));
+				// quick fix part is here, and should be moved to a custom classifieds controller for beefyy
+				// or some way for the form input to ask for a tree list or a threaded list would be nice too
+				$this->set('categoryList', $categoryList = $this->Classified->Category->generateTreeList(
+					array(
+						'Category.model' => 'Classified',
+					),
+			          null,
+			          null,
+			          '---'
+			        ));
 			}
 			$this->request->data = $this->Classified->read(null, $id);
 		}
