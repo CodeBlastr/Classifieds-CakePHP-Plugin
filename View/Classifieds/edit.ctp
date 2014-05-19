@@ -42,7 +42,7 @@
 			<div class="span3">
 				<?php if (CakePlugin::loaded('Categories')) : ?>
 					<div class="accordion row-fluid" id="catTest"></div>
-					<?php echo $this->Tree->generate($categories, array('model' => 'Category', 'alias' => 'item_text', 'class' => 'categoriesList', 'id' => 'categoriesList', 'element' => 'Categories/input', 'elementPlugin' => 'classifieds')); ?>
+					<?php echo $this->Tree->generate($categoryList, array('model' => 'Category', 'alias' => 'item_text', 'class' => 'categoriesList', 'id' => 'categoriesList', 'element' => 'Categories/input', 'elementPlugin' => 'classifieds')); ?>
 				<?php endif; ?>
 			</div>
 			<div class="span3">				
@@ -57,19 +57,6 @@
 		</div>
 	<?php //echo $this->Form->input('Classified.weight', array('type' => 'text')); ?>
 	<?php echo $this->Form->end('Save'); ?>
-	
-	<?php echo $this->Form->create('TransactionItem', array('url' => array('plugin' => 'transactions', 'controller'=>'transaction_items', 'action'=>'add'))); ?>
-		<?php echo $this->Form->hidden('TransactionItem.quantity' , array('class' => 'span', 'label' => false, 'value' => 1, 'min' => $minQty, 'max' => $maxQty)); ?>
-		<?php echo $this->Form->hidden('TransactionItem.name' , array('value' => $this->request->data('Classified.title'))); ?>
-		<?php echo $this->Form->hidden('TransactionItem.model' , array('value' => 'Classified')); ?>
-		<?php echo $this->Form->hidden('TransactionItem.foreign_key' , array('value' => $this->request->data('Classified.id'))); ?>
-		<?php echo $this->Form->hidden('TransactionItem.price' , array('value' => '5.00')); ?>
-		<?php echo $this->Form->hidden('TransactionItem.cart_max' , array('value' => $maxQty)); ?>
-		<?php echo $this->Form->hidden('TransactionItem.cart_min' , array('value' => $minQty)); ?>
-		
-	 <?php //echo $this->Element('payment_type', array(), array('plugin' => 'products')); ?>
-	
-	 <?php echo $this->Form->end('Make Featured'); ?>
 	
 </div>
 

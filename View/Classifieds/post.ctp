@@ -154,11 +154,12 @@
 			attr = $(this).attr('data-children');
 			children = attr ? attr.split(',') : null; // children of selected input
 			selector = children ? 'input[data-parent=' + children.join('], input[data-parent=') + ']' : null;
-			$(selector).parent().parent().parent().show();
+			$(selector).closest('div.accordion-group').show().find('.accordion-body').addClass('collapse in').css('height', 'auto');
 			
 			// shrink up the current box after selection
-			var heading = $('a.accordion-toggle', $(this).parent().parent().parent()); // '#collapse-99999-9999-99999-99999
-			$(heading.attr('href')).collapse('hide');
+			var heading = $('a.accordion-toggle', $(this).closest('div.accordion-group')); // '#collapse-99999-9999-99999-99999
+			//console.log(heading.attr('href'));
+			$(heading.attr('href')).addClass("collapse").removeClass('in').css('height', '0');
 			
 			// add a little text to show what was chosen
 			heading.parent().html($(heading).clone().wrap('<p>').parent().html() + ' <span class="label label-info">' + $(this).next().text() + '</span>');
