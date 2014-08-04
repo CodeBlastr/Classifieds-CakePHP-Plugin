@@ -4,6 +4,7 @@ App::uses('ClassifiedsAppController', 'Classifieds.Controller');
  * Classifieds Controller
  *
  * @property Classified $Classified
+ * @property TransactionItem TransactionItem
  */
 class AppClassifiedsController extends ClassifiedsAppController {
 
@@ -118,22 +119,38 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		}
 	}
 
+    /**
+     * add a classifieds Product in Product table
+     * with expire date
+     */
+    public function product(){
+
+    }
 /**
  * add method
  *
  * @return void
  */
-	public function add() {
+	public function add($transId = null) {
 		// i don't remember why we moved to the post function now, but we never seem to use the add function (probably will switch later)
-		$this->redirect(array('action' => 'post'));
-		return $this->post();
+		$this->redirect(array('action' => 'post',$transId));
+		//$this->post($transId);
 	}
+
 	
 /**
  * post method
  * 
  */
-	public function post() {
+	public function post($transId = null) {
+
+
+        $this->loadModel('Transactions.TransactionItem');
+        $this->TransactionItem->read(null,$transId);
+        if(empty($this->TransactionItem->data['TransactionItem'])){
+            throw new Exception('Transaction item not found');
+        }
+        $this->set('expDays',$this->TransactionItem->data['TransactionItem']['data']['days']);
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
 			$this->Classified->create();
@@ -163,6 +180,7 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		          '---'
 		        ));
 		}
+
 	}
 	
 	
