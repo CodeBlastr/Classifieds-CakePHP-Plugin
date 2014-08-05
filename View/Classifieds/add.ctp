@@ -11,11 +11,11 @@
 				<?php echo CakePlugin::loaded('Media') ? $this->Element('Media.media_selector', array('media' => $this->request->data['Media'], 'multiple' => true)) : null; ?>
 			</div>
 		</div>
-		
+
 		<div class="row-fluid">
 			<?php echo $this->Form->input('Classified.description', array('type' => 'textarea')); ?>
-		</div>		
-		
+		</div>
+
 		<div class="row-fluid">
 			<div class="span3">
 				<?php echo $this->Form->input('Classified.price', array('type' => 'text')); ?>
@@ -30,22 +30,22 @@
 				<?php echo $this->Form->input('Classified.shipping_terms', array('type' => 'text')); ?>
 			</div>
 		</div>
-		
+
 		<div class="row-fluid">
 			<div class="span3">
 				<?php if (CakePlugin::loaded('Categories')) : ?>
 					<?php echo $this->Form->input('Category.Category', array('type' => 'select', 'options' => $categories, 'multiple' => 'checkbox', 'limit' => 3)); ?>
 				<?php endif; ?>
 			</div>
-			<div class="span3">				
+			<div class="span3">
 				<?php echo $this->Form->input('Classified.city', array('type' => 'text')); ?>
 			</div>
-			<div class="span3">		
+			<div class="span3">
 				<?php echo $this->Form->input('Classified.state', array('empty' => '- choose -', 'options' => states())); ?>
 			</div>
-			<div class="span3">			
+			<div class="span3">
 				<?php echo $this->Form->input('Classified.zip', array('type' => 'text')); ?>
-			</div>				
+			</div>
 		</div>
 	<?php //echo $this->Form->input('Classified.weight', array('type' => 'text')); ?>
 	<?php echo $this->Form->end('Save'); ?>

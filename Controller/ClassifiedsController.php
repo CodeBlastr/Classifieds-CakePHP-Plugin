@@ -5,6 +5,7 @@ App::uses('ClassifiedsAppController', 'Classifieds.Controller');
  *
  * @property Classified $Classified
  * @property TransactionItem TransactionItem
+ * @property Transaction Transaction
  */
 class AppClassifiedsController extends ClassifiedsAppController {
 
@@ -126,6 +127,12 @@ class AppClassifiedsController extends ClassifiedsAppController {
     public function product(){
 
     }
+    public function productedit($id){
+        $this->view = 'product_edit';
+        if(!empty($id)){
+
+        }
+    }
 /**
  * add method
  *
@@ -147,14 +154,21 @@ class AppClassifiedsController extends ClassifiedsAppController {
 
         $this->loadModel('Transactions.TransactionItem');
         $this->TransactionItem->read(null,$transId);
-        if(empty($this->TransactionItem->data['TransactionItem'])){
+        if(empty($this->TransactionItem->data['TransactionItem']) || $this->TransactionItem->data['TransactionItem']['customer_id'] != $this->userId){
             throw new Exception('Transaction item not found');
         }
+        if($this->TransactionItem->data['TransactionItem']['status'] == 'used'){
+            throw new Exception('This supply already used');
+        }
+        $this->Session->write('current_using_supply_id',$transId);
+
         $this->set('expDays',$this->TransactionItem->data['TransactionItem']['data']['days']);
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
+
 			$this->Classified->create();
 			if ($this->Classified->save($this->request->data)) {
+                $this->TransactionItem->save(array('status'=>'used'));
 				$this->Session->setFlash(__('The Classified has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {

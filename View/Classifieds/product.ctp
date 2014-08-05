@@ -24,7 +24,9 @@
  */
 ?>
     <div class="productAdd form">
-        <?php echo $this->Form->create('Product', array('type' => 'file','plugin'=>'Products','url'=>'/admin/products/products/add')); ?>
+        <?php echo $this->Form->create('Product', array('type' => 'file','plugin'=>'Products','url'=>'/admin/products/products/add'));
+        echo $this->Form->hidden('Product.is_virtual', array('value' => 1));
+        ?>
         <fieldset>
             <?php
             echo $this->Form->input('Product.name', array('label' => 'Display Name'));
@@ -37,53 +39,7 @@
 
         </fieldset>
 
-        <fieldset>
-            <legend class="toggleClick"><?php echo __('Optional product details'); ?></legend>
-            <?php
-            echo $this->Form->input('Product.sku', array('label' => 'SKU'));
-            echo $this->Form->input('Product.summary', array('type' => 'text', 'label' => 'Promo Text <br /><small><em>Used to entice people to view more about this item.</em></small>'));
-            echo $this->Form->input('Product.product_brand_id', array('empty' => '-- Select --', 'label' => 'What is the brand name for this product? ('.$this->Html->link('add', array('controller' => 'product_brands', 'action' => 'add')).' / '.$this->Html->link('edit', array('controller' => 'product_brands', 'action' => 'index')).' brands)'));
-            echo $this->Form->input('Product.stock', array('label' => 'Would you like to track inventory?'));
-            echo $this->Form->input('Product.cost', array('label' => 'What does the product cost you? <br /><small><em>Used if you get profit reports</em></small>'));
-            echo $this->Form->input('Product.cart_min', array('label' => 'Minimun Cart Quantity? <br /><small><em>Enter the minimum cart quantity or leave blank for 1</em></small>'));
-            echo $this->Form->input('Product.cart_max', array('label' => 'Maximum Cart Quantity? <br /><small><em>Enter the max cart quantity or leave blank for unlimited</em></small>'));
-            echo $this->Form->input('Product.is_public', array('default' => 1, 'label' => 'Published'));
-            echo $this->Form->input('Product.is_buyable', array('default' => 1, 'label' => 'Buyable')); ?>
-        </fieldset>
 
-        <fieldset>
-            <legend class="toggleClick"><?php echo __('Do you offer shipping for this product?');?></legend>
-            <?php
-            $fedexSettings = defined('__ORDERS_FEDEX') ? unserialize(__ORDERS_FEDEX) : null;
-            $radioOptions = array();
-            if (!empty($fedexSettings)) : foreach($fedexSettings as $k => $val) :
-                $radioOptions[$k] = $val ;
-                echo $this->Form->input('Product.weight', array('label' => 'Weight (lbs)'));
-                echo $this->Form->input('Product.height', array('label' => 'Height (8-70 inches)'));
-                echo $this->Form->input('Product.width', array('label' => 'Width (50-119 inches)'));
-                echo $this->Form->input('Product.length', array('label' => 'Length (50-119 inches)'));
-            endforeach; endif;
-            $radioOptions += array('FIXEDSHIPPING' => 'FIX SHIPPING', 'FREESHIPPING' => 'FREE SHIPPING') ;
-            echo $this->Form->radio('Product.shipping_type', $radioOptions, array('class' => 'shipping_type' , 'default' => ''));
-            ?>
-            <div id='ShippingPrice'>
-                <?php echo $this->Form->input('Product.shipping_charge', array('type' => 'number', 'step' => '0.01', 'min' => '0.00'));?>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend class="toggleClick"><?php echo __('Does this product belong to a category?');?></legend>
-            <?php echo $this->Form->input('Category', array('multiple' => 'checkbox', 'label' => 'Which categories? ('.$this->Html->link('add', array('plugin' => 'categories', 'controller' => 'categories', 'action' => 'tree')).' / '.$this->Html->link('edit', array('plugin' => 'categories', 'controller' => 'categories', 'action' => 'tree')).' categoies)')); ?>
-        </fieldset>
-
-        <?php if(!empty($paymentOptions)) : ?>
-            <fieldset>
-                <legend class="toggleClick"><?php echo __('Select Payment Types For The Item.');?></legend>
-                <?php
-                echo $this->Form->input('Product.payment_type', array('options' => $paymentOptions, 'multiple' => 'checkbox'));
-                ?>
-            </fieldset>
-        <?php endif; ?>
         <?php echo $this->Form->end('Submit'); ?>
     </div>
 
