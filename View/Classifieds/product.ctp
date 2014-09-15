@@ -91,5 +91,5 @@ $this->set('context_menu', array('menus' => array(
             $this->Html->link(__('Dashboard'), array('controller' => 'products', 'action' => 'dashboard')),
             $this->Html->link(__('List'), array('controller' => 'products', 'action' => 'index')),
         )
-    ),
+    )
 )));

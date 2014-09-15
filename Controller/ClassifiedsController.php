@@ -307,7 +307,6 @@ class AppClassifiedsController extends ClassifiedsAppController {
  * @return void
  */
 	public function delete($id = null) {
-		
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
