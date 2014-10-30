@@ -127,12 +127,14 @@ class AppClassifiedsController extends ClassifiedsAppController {
     public function product(){
 
     }
+
     public function productedit($id){
         $this->view = 'product_edit';
         if(!empty($id)){
 
         }
     }
+
 /**
  * add method
  *
@@ -144,14 +146,11 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		//$this->post($transId);
 	}
 
-	
 /**
  * post method
  * 
  */
 	public function post($transId = null) {
-
-
         $this->loadModel('Transactions.TransactionItem');
         $this->TransactionItem->read(null,$transId);
         if(empty($this->TransactionItem->data['TransactionItem']) || $this->TransactionItem->data['TransactionItem']['customer_id'] != $this->userId){
@@ -161,12 +160,9 @@ class AppClassifiedsController extends ClassifiedsAppController {
         if(!empty($this->TransactionItem->data['TransactionItem']) && $this->TransactionItem->data['TransactionItem']['status'] == 'used'){
             throw new Exception('This supply already used');
         }
-
-
         $this->set('expDays',$this->TransactionItem->data['TransactionItem']['data']['days']);
 		$this->set('title_for_layout', __('Post a Classified Ad') . ' | ' . __SYSTEM_SITE_NAME);
 		if ($this->request->is('post')) {
-
 			$this->Classified->create();
 			if ($this->Classified->save($this->request->data)) {
                 if($this->request->data['Classified']['type'] == 0){
@@ -197,7 +193,6 @@ class AppClassifiedsController extends ClassifiedsAppController {
 		          '---'
 		        ));
 		}
-
 	}
 	
 	
