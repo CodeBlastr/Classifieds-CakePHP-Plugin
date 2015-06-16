@@ -185,13 +185,7 @@ class AppClassifiedsController extends ClassifiedsAppController {
 			// quick fix part is here, and should be moved to a custom classifieds controller for beefyy
 			// or some way for the form input to ask for a tree list or a threaded list would be nice too
 			$this->set('categoryList', $categoryList = $this->Classified->Category->generateTreeList(
-				array(
-					'Category.model' => 'Classified',
-				),
-		          null,
-		          null,
-		          '---'
-		        ));
+				array('Category.model' => 'Classified'), null, null, '---'));
 		}
 	}
 	
